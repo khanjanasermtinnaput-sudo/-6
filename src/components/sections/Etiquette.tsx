@@ -5,7 +5,6 @@ import { motion, useScroll, useSpring, useMotionValueEvent } from "motion/react"
 import { Check } from "lucide-react";
 import { etiquette } from "@/lib/data";
 import SectionHeading from "../SectionHeading";
-import Icon from "../Icon";
 
 export default function Etiquette() {
   const ref = useRef<HTMLDivElement>(null);
@@ -55,9 +54,7 @@ export default function Etiquette() {
               >
                 <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-[#ff8a3d]/15 blur-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-                <div className="relative grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[#ff8a3d] to-[#a66a3f] text-white shadow-lg">
-                  <Icon name={rule.icon} className="h-6 w-6" />
-                </div>
+                <div className="relative mt-1 h-12 w-1 shrink-0 rounded-full bg-gradient-to-b from-[#ff8a3d] to-[#a66a3f]" />
 
                 <div className="relative flex-1">
                   <div className="flex items-center gap-3">

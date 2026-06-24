@@ -5,7 +5,6 @@ import { motion, useInView } from "motion/react";
 import { benefits, type Benefit } from "@/lib/data";
 import SectionHeading from "../SectionHeading";
 import Counter from "../Counter";
-import Icon from "../Icon";
 
 const groups = ["ร่างกาย", "จิตใจ", "สังคม"] as const;
 const groupMeta: Record<string, { en: string; desc: string }> = {
@@ -43,15 +42,12 @@ function Ring({ b }: { b: Benefit }) {
           </defs>
         </svg>
         <div className="absolute inset-0 grid place-items-center">
-          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-[#ff8a3d] to-[#a66a3f] text-white">
-            <Icon name={b.icon} className="h-5 w-5" />
-          </div>
+          <span className="font-display text-2xl font-bold text-[#111]">
+            <Counter value={b.value} suffix={b.suffix} />
+          </span>
         </div>
       </div>
-      <p className="font-display mt-4 text-3xl font-bold text-[#111]">
-        <Counter value={b.value} suffix={b.suffix} />
-      </p>
-      <p className="mt-1 text-sm text-[#6b6b6b]">{b.label}</p>
+      <p className="mt-4 text-sm text-[#6b6b6b]">{b.label}</p>
     </div>
   );
 }

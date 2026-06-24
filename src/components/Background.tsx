@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { useEffect, useState } from "react";
 
 type Particle = {
   left: string;
@@ -13,102 +12,68 @@ type Particle = {
 };
 
 /**
- * Fixed ambient background — gradient orbs, light rays, and floating
- * particles that drift upward. Subtly parallaxes on scroll & mouse.
+ * Lightweight ambient background — two slow gradient orbs and a few
+ * drifting particles. Kept minimal & GPU-friendly (no scroll/mouse
+ * re-compositing of blurred layers) to avoid scroll jank.
  */
 export default function Background() {
-  const ref = useRef<HTMLDivElement>(null);
   const [particles, setParticles] = useState<Particle[]>([]);
-  const { scrollYProgress } = useScroll();
-
-  const y1 = useTransform(scrollYProgress, [0, 1], ["0%", "-25%"]);
-  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
   useEffect(() => {
-    const count = window.innerWidth < 768 ? 18 : 36;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+    const count = window.innerWidth < 768 ? 6 : 12;
     const next: Particle[] = Array.from({ length: count }).map(() => ({
       left: `${Math.random() * 100}%`,
-      size: 2 + Math.random() * 5,
+      size: 2 + Math.random() * 4,
       delay: `${Math.random() * 18}s`,
-      duration: `${16 + Math.random() * 18}s`,
-      drift: `${(Math.random() - 0.5) * 120}px`,
-      opacity: 0.25 + Math.random() * 0.45,
+      duration: `${18 + Math.random() * 16}s`,
+      drift: `${(Math.random() - 0.5) * 80}px`,
+      opacity: 0.2 + Math.random() * 0.35,
     }));
     setParticles(next);
   }, []);
 
-  // Mouse parallax for orbs
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const onMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const y = (e.clientY / window.innerHeight - 0.5) * 2;
-      el.style.setProperty("--mx", `${x * 24}px`);
-      el.style.setProperty("--my", `${y * 24}px`);
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
-
   return (
     <div
-      ref={ref}
       aria-hidden
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
-      style={{ background: "radial-gradient(120% 120% at 50% 0%, #fff 40%, #fff6ef 100%)" }}
+      style={{
+        background:
+          "radial-gradient(120% 120% at 50% 0%, #fff 45%, #fff6ef 100%)",
+      }}
     >
-      {/* Gradient orbs */}
-      <motion.div style={{ y: y1 }} className="absolute inset-0">
-        <div
-          className="orb float-a"
-          style={{
-            width: 520,
-            height: 520,
-            top: "-8%",
-            left: "calc(8% + var(--mx, 0px))",
-            background:
-              "radial-gradient(circle at 30% 30%, #ffb07a, #ff8a3d 60%, transparent 72%)",
-          }}
-        />
-        <div
-          className="orb float-b"
-          style={{
-            width: 440,
-            height: 440,
-            top: "30%",
-            right: "calc(2% - var(--mx, 0px))",
-            background:
-              "radial-gradient(circle at 60% 40%, #ffd2a8, #a66a3f 65%, transparent 75%)",
-            opacity: 0.4,
-          }}
-        />
-      </motion.div>
-
-      <motion.div style={{ y: y2 }} className="absolute inset-0">
-        <div
-          className="orb float-a"
-          style={{
-            width: 380,
-            height: 380,
-            bottom: "6%",
-            left: "calc(30% + var(--my, 0px))",
-            background:
-              "radial-gradient(circle at 50% 50%, #ffb07a, transparent 70%)",
-            opacity: 0.35,
-            animationDelay: "4s",
-          }}
-        />
-      </motion.div>
-
-      {/* Light rays */}
+      {/* Gradient orbs — slow CSS float only */}
       <div
-        className="absolute left-1/2 top-[-30%] h-[80vh] w-[60vw] -translate-x-1/2"
+        className="orb float-a"
+        style={{
+          width: 460,
+          height: 460,
+          top: "-6%",
+          left: "8%",
+          background:
+            "radial-gradient(circle at 30% 30%, #ffb07a, #ff8a3d 60%, transparent 72%)",
+        }}
+      />
+      <div
+        className="orb float-b"
+        style={{
+          width: 400,
+          height: 400,
+          top: "32%",
+          right: "2%",
+          background:
+            "radial-gradient(circle at 60% 40%, #ffd2a8, #a66a3f 65%, transparent 75%)",
+          opacity: 0.35,
+        }}
+      />
+
+      {/* Static soft light wash (no animation) */}
+      <div
+        className="absolute left-1/2 top-[-25%] h-[70vh] w-[55vw] -translate-x-1/2"
         style={{
           background:
-            "conic-gradient(from 180deg at 50% 0%, transparent 0deg, rgba(255,138,61,0.10) 20deg, transparent 40deg, rgba(255,176,122,0.10) 70deg, transparent 95deg)",
-          animation: "sweep 14s ease-in-out infinite",
-          filter: "blur(6px)",
+            "radial-gradient(closest-side, rgba(255,138,61,0.08), transparent 70%)",
         }}
       />
 
@@ -133,15 +98,6 @@ export default function Background() {
           />
         ))}
       </div>
-
-      {/* Soft grain / vignette */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(166,106,63,0.06) 100%)",
-        }}
-      />
     </div>
   );
 }

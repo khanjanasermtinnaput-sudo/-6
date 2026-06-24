@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import Magnetic from "./Magnetic";
 import { scrollToId } from "./SmoothScroll";
@@ -14,26 +14,6 @@ export default function Hero() {
   });
   const yTitle = useTransform(scrollYProgress, [0, 1], ["0%", "60%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
-
-  // mouse depth
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const smx = useSpring(mx, { stiffness: 80, damping: 20 });
-  const smy = useSpring(my, { stiffness: 80, damping: 20 });
-  const d1x = useTransform(smx, [-1, 1], [-30, 30]);
-  const d1y = useTransform(smy, [-1, 1], [-20, 20]);
-  const d2x = useTransform(smx, [-1, 1], [25, -25]);
-  const d2y = useTransform(smy, [-1, 1], [18, -18]);
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      mx.set(e.clientX / window.innerWidth - 0.5);
-      my.set(e.clientY / window.innerHeight - 0.5);
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, [mx, my]);
 
   return (
     <section
@@ -41,20 +21,6 @@ export default function Hero() {
       id="hero"
       className="relative flex min-h-[100svh] items-center justify-center overflow-hidden"
     >
-      {/* silhouette dancers */}
-      <motion.div
-        style={{ x: d1x, y: d1y, scale }}
-        className="pointer-events-none absolute bottom-0 left-[6%] hidden h-[70vh] w-auto opacity-[0.10] md:block"
-      >
-        <Dancer flip />
-      </motion.div>
-      <motion.div
-        style={{ x: d2x, y: d2y, scale }}
-        className="pointer-events-none absolute bottom-0 right-[6%] hidden h-[78vh] w-auto opacity-[0.10] md:block"
-      >
-        <Dancer />
-      </motion.div>
-
       {/* glass disc behind title */}
       <motion.div
         style={{ opacity }}
@@ -141,28 +107,5 @@ export default function Hero() {
         <ChevronDown className="h-4 w-4 animate-bounce" />
       </motion.button>
     </section>
-  );
-}
-
-function Dancer({ flip = false }: { flip?: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 120 320"
-      className="h-full w-auto"
-      style={{ transform: flip ? "scaleX(-1)" : undefined }}
-      fill="url(#dancerGrad)"
-    >
-      <defs>
-        <linearGradient id="dancerGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#ff8a3d" />
-          <stop offset="100%" stopColor="#a66a3f" />
-        </linearGradient>
-      </defs>
-      {/* stylised dancer silhouette */}
-      <circle cx="60" cy="28" r="16" />
-      <path d="M60 44 C50 60 48 90 52 120 L40 200 L30 290 L46 290 L60 210 L74 290 L90 290 L80 200 L68 120 C72 90 70 60 60 44 Z" />
-      <path d="M52 70 L14 110 L20 122 L60 90 Z" />
-      <path d="M68 70 L112 96 L106 110 L60 92 Z" />
-    </svg>
   );
 }

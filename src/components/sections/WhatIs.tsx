@@ -4,7 +4,6 @@ import { motion } from "motion/react";
 import { whatIsCards } from "@/lib/data";
 import SectionHeading from "../SectionHeading";
 import TiltCard from "../TiltCard";
-import Icon from "../Icon";
 
 export default function WhatIs() {
   return (
@@ -37,10 +36,8 @@ export default function WhatIs() {
 
                   <div
                     style={{ transform: "translateZ(40px)" }}
-                    className="relative grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-[#ff8a3d] to-[#a66a3f] text-white shadow-lg"
-                  >
-                    <Icon name={card.icon} className="h-6 w-6" />
-                  </div>
+                    className="relative h-1 w-10 rounded-full bg-gradient-to-r from-[#ff8a3d] to-[#a66a3f]"
+                  />
 
                   <div style={{ transform: "translateZ(25px)" }} className="relative mt-6">
                     <h3 className="font-display text-2xl font-semibold text-[#111]">

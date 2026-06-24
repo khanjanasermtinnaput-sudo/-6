@@ -52,12 +52,9 @@ export default function Styles() {
                     className={`pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-gradient-to-br ${s.accent} opacity-30 blur-2xl transition-opacity duration-500 group-hover:opacity-60`}
                   />
                   <div style={{ transform: "translateZ(30px)" }} className="relative">
-                    <div className="flex items-center justify-between">
-                      <span className="rounded-full border border-[#a66a3f]/20 bg-white/40 px-3 py-1 text-[11px] font-medium tracking-wide text-[#a66a3f]">
-                        {s.category}
-                      </span>
-                      <Music2 className="h-4 w-4 text-[#ff8a3d]" />
-                    </div>
+                    <span className="inline-block rounded-full border border-[#a66a3f]/20 bg-white/40 px-3 py-1 text-[11px] font-medium tracking-wide text-[#a66a3f]">
+                      {s.category}
+                    </span>
 
                     <h3 className="font-display mt-8 text-3xl font-bold text-[#111]">
                       {s.name}
