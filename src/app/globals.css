@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN SYSTEM — Basic Ballroom Dance
+   Glassmorphism + Neo Minimalism + Premium Editorial
+   ============================================================ */
+
+@theme {
+  --color-bg: #ffffff;
+  --color-ink: #111111;
+  --color-primary: #ff8a3d;
+  --color-primary-soft: #ffb07a;
+  --color-secondary: #a66a3f;
+  --color-muted: #6b6b6b;
+
+  --font-display: var(--font-prompt), "Prompt", sans-serif;
+  --font-body: var(--font-sarabun), "Sarabun", sans-serif;
+
+  --shadow-glow: 0 0 60px -15px rgba(255, 138, 61, 0.55);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #111111;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ---------- Typography ---------- */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+.text-balance {
+  text-wrap: balance;
+}
+
+/* ---------- Glass ---------- */
+.glass {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(30px) saturate(160%);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 10px 40px -12px rgba(17, 17, 17, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.glass-strong {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+.glass-dark {
+  background: rgba(17, 17, 17, 0.45);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Glass refraction highlight that sweeps on hover */
+.refract {
+  position: relative;
+  overflow: hidden;
+}
+.refract::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.55) 48%,
+    transparent 60%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.refract:hover::after {
+  transform: translateX(120%);
+}
+
+/* ---------- Gradient text ---------- */
+.text-gradient {
+  background: linear-gradient(120deg, #ff8a3d 0%, #a66a3f 60%, #ff8a3d 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+@keyframes shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* ---------- Floating orbs ---------- */
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.55;
+  will-change: transform;
+}
+@keyframes float-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(40px, -60px, 0) scale(1.1); }
+}
+@keyframes float-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-50px, 40px, 0) scale(1.15); }
+}
+.float-a { animation: float-a 16s ease-in-out infinite; }
+.float-b { animation: float-b 20s ease-in-out infinite; }
+
+/* ---------- Particles ---------- */
+@keyframes rise {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: var(--p-op, 0.6); }
+  90% { opacity: var(--p-op, 0.6); }
+  100% { transform: translateY(-110vh) translateX(var(--p-x, 20px)); opacity: 0; }
+}
+
+/* ---------- Scroll indicator ---------- */
+@keyframes scroll-dot {
+  0% { transform: translateY(0); opacity: 0; }
+  30% { opacity: 1; }
+  60% { opacity: 1; }
+  100% { transform: translateY(20px); opacity: 0; }
+}
+
+/* ---------- Light rays ---------- */
+@keyframes sweep {
+  0%, 100% { opacity: 0.25; transform: rotate(0deg) scale(1); }
+  50% { opacity: 0.5; transform: rotate(8deg) scale(1.05); }
+}
+
+/* ---------- Utilities ---------- */
+.section-pad {
+  padding-block: clamp(6rem, 14vh, 12rem);
+}
+.container-x {
+  width: min(1200px, 92vw);
+  margin-inline: auto;
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+::selection {
+  background: rgba(255, 138, 61, 0.25);
+  color: #111;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
